@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Aptitude Test Result | CareerPilot AI</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+
+    <style>
+
+        .result-hero {
+            text-align: center;
+        }
+
+        .score-circle {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background: #6c5ce7;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            margin: 25px auto;
+            box-shadow: 0 15px 35px rgba(108, 92, 231, 0.3);
+        }
+
+        .score-circle strong {
+            font-size: 42px;
+        }
+
+        .score-circle span {
+            font-size: 14px;
+        }
+
+        .answer-card {
+            background: white;
+            border-radius: 18px;
+            padding: 25px;
+            margin-bottom: 20px;
+            border: 1px solid #e5e7eb;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.05);
+        }
+
+        .answer-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 18px;
+            gap: 10px;
+        }
+
+        .correct-badge {
+            background: #dcfce7;
+            color: #15803d;
+            padding: 7px 13px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .wrong-badge {
+            background: #fee2e2;
+            color: #dc2626;
+            padding: 7px 13px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .answer-row {
+            margin-top: 15px;
+            padding: 14px;
+            border-radius: 10px;
+            background: #f8fafc;
+        }
+
+        .answer-row strong {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .explanation {
+            margin-top: 18px;
+            padding: 16px;
+            background: #f5f3ff;
+            border-left: 4px solid #6c5ce7;
+            border-radius: 10px;
+        }
+
+        @media (max-width: 700px) {
+
+            .answer-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .score-circle {
+                width: 130px;
+                height: 130px;
+            }
+
+            .score-circle strong {
+                font-size: 35px;
+            }
+
+        }
+
+    </style>
+
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet"><style>:root{--ap-ink:#24333b;--ap-muted:#75838a;--ap-teal:#237f78;--ap-dark:#176760;--ap-pale:#e6f3f0;--ap-cream:#f7f5ef;--ap-paper:#fffefa;--ap-line:#e5e8e2;--ap-shadow:0 14px 36px #293c3a10}body.aptitude-page{background:var(--ap-cream)!important;color:var(--ap-ink)!important;font-family:'DM Sans','Inter',sans-serif!important}.aptitude-page .sidebar{background:#eff0ea!important;border-right:1px solid var(--ap-line)!important}.aptitude-page .sidebar-link.active{background:#e0ece7!important;color:var(--ap-dark)!important}.aptitude-page .brand-icon{background:var(--ap-teal)!important}.aptitude-page .welcome-small{color:var(--ap-teal)!important}.aptitude-page .profile-avatar{background:var(--ap-pale)!important;color:var(--ap-dark)!important}.aptitude-page .dashboard-hero{height:auto!important;min-height:0!important;max-height:none!important;padding:25px 29px!important;margin:0 0 22px!important;border:1px solid #d7e8e1!important;border-radius:20px!important;background:linear-gradient(120deg,#e4f1ed,#fffefa 80%)!important;box-shadow:var(--ap-shadow)!important}.aptitude-page .hero-content{width:auto!important;max-width:760px!important}.aptitude-page .hero-badge{background:var(--ap-pale)!important;color:var(--ap-dark)!important;border-radius:99px!important}.aptitude-page .dashboard-hero h2{color:var(--ap-ink)!important;font-weight:800}.aptitude-page .dashboard-hero p{color:#65767a!important}.aptitude-page .module-form,.aptitude-page .module-card,.aptitude-page .answer-card{background:var(--ap-paper)!important;border:1px solid var(--ap-line)!important;border-radius:17px!important;box-shadow:var(--ap-shadow)!important}.aptitude-page .module-form{padding:25px!important}.aptitude-page .option-card{background:var(--ap-paper)!important;border:1px solid var(--ap-line)!important;border-radius:13px!important;color:var(--ap-ink)!important}.aptitude-page .option-card:hover,.aptitude-page .option-card:has(input:checked){border-color:var(--ap-teal)!important;background:#f1f8f5!important}.aptitude-page input[type=radio]{accent-color:var(--ap-teal)}.aptitude-page select{width:100%;height:45px;padding:0 12px;border:1px solid #dce2de;border-radius:10px;background:white;color:var(--ap-ink)}.aptitude-page .primary-btn{background:var(--ap-teal)!important;color:white!important;border-radius:10px!important}.aptitude-page .secondary-btn{background:white!important;border:1px solid var(--ap-line)!important;color:var(--ap-dark)!important;border-radius:10px!important}.aptitude-page .section-heading p{color:var(--ap-muted)!important}.aptitude-page .aptitude-test-section{margin-top:17px}.aptitude-page .aptitude-question{display:flex;align-items:center;gap:20px;min-height:180px;padding:23px!important;margin-bottom:14px!important;background:var(--ap-paper)!important;border:1px solid var(--ap-line)!important;border-radius:17px!important;box-shadow:var(--ap-shadow)!important;color:var(--ap-ink)!important}.aptitude-page .question-content{flex:1;min-width:0}.aptitude-page .question-header{margin-bottom:12px}.aptitude-page .question-badge{padding:7px 11px;background:var(--ap-pale)!important;color:var(--ap-dark)!important;border-radius:99px;font-size:11px}.aptitude-page .question-text{font-size:clamp(17px,2vw,22px)!important;line-height:1.5!important;color:var(--ap-ink)!important}.aptitude-page .aptitude-options{width:42%;min-width:270px;display:grid;grid-template-columns:1fr 1fr;gap:9px}.aptitude-page .aptitude-option{display:flex;align-items:flex-start;gap:8px;padding:11px;border:1px solid var(--ap-line)!important;border-radius:11px;background:white;color:var(--ap-ink)!important}.aptitude-page .aptitude-option:hover,.aptitude-page .aptitude-option.selected{border-color:var(--ap-teal)!important;background:#f0f8f5!important}.aptitude-page .aptitude-option input{accent-color:var(--ap-teal);flex:none}.aptitude-page .aptitude-option span{font-size:12px!important;line-height:1.5;color:var(--ap-ink)!important}.aptitude-page .aptitude-option strong{color:var(--ap-dark)!important}.aptitude-page .aptitude-navigation{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:17px;flex-wrap:wrap}.aptitude-page .question-numbers{display:flex;gap:6px;flex-wrap:wrap;justify-content:center}.aptitude-page .question-number{width:34px;height:34px;border:1px solid var(--ap-line);border-radius:9px;background:white;color:#52636a;font-weight:700}.aptitude-page .question-number:hover,.aptitude-page .question-number.active{background:var(--ap-teal);border-color:var(--ap-teal);color:white}.aptitude-page .score-circle{width:132px;height:132px;border-radius:50%;background:var(--ap-teal)!important;box-shadow:0 10px 27px #237f7824!important}.aptitude-page .answer-card{padding:22px!important;margin-bottom:14px!important}.aptitude-page .correct-badge,.aptitude-page .wrong-badge{border-radius:99px;padding:6px 10px;font-size:11px;font-weight:700}.aptitude-page .correct-badge{background:#e5f3ed;color:#237f58}.aptitude-page .wrong-badge{background:#faece8;color:#b95343}.aptitude-page .answer-row{margin-top:10px;padding:12px;border:1px solid var(--ap-line);border-radius:10px;background:#f7f8f4}.aptitude-page .explanation{margin-top:12px;padding:14px;border-left:3px solid var(--ap-teal);border-radius:10px;background:var(--ap-pale)}
+@media(max-width:900px){.aptitude-page .aptitude-question{flex-direction:column!important;align-items:stretch!important}.aptitude-page .aptitude-options{width:100%;min-width:0}}@media(max-width:600px){.aptitude-page .dashboard-hero{padding:19px!important}.aptitude-page .aptitude-question{padding:17px!important;min-height:0!important}.aptitude-page .aptitude-options{grid-template-columns:1fr}.aptitude-page .aptitude-navigation{justify-content:center}.aptitude-page .module-form{padding:18px!important}}
+/* Unified high-contrast finish for every Aptitude screen. */
+.aptitude-page{background:radial-gradient(ellipse at 88% 0%,#e2f0eb 0,transparent 31%),#f4f3ed!important;color:#24333b!important}.aptitude-page .sidebar{background:#203438!important;border-right:1px solid #31484b!important}.aptitude-page .brand h2{color:#f5faf7!important}.aptitude-page .brand span{color:#b1c2bf!important}.aptitude-page .nav-title{color:#8ea6a3!important}.aptitude-page .sidebar-link{color:#b3c3c0!important}.aptitude-page .sidebar-link:hover,.aptitude-page .sidebar-link.active{background:#dff0e9!important;color:#194f50!important}.aptitude-page .topbar h1{font-size:27px!important;letter-spacing:-.8px!important}.aptitude-page .dashboard-hero{height:auto!important;min-height:0!important;max-height:none!important;position:relative!important;overflow:hidden!important;display:flex!important;align-items:center!important;justify-content:space-between!important;gap:22px!important;padding:28px 32px!important;margin:0 0 23px!important;border:0!important;border-radius:21px!important;background:linear-gradient(112deg,#173f43 0%,#236b67 64%,#328c80 100%)!important;box-shadow:0 20px 45px #174e4b24!important;color:#fffefa!important}.aptitude-page .dashboard-hero:after{content:'';position:absolute;width:260px;height:260px;border:1px solid #ffffff22;border-radius:50%;right:120px;top:-180px;box-shadow:0 0 0 26px #ffffff0c,0 0 0 54px #ffffff08}.aptitude-page .dashboard-hero .hero-content{position:relative;z-index:1;width:auto!important;max-width:760px!important}.aptitude-page .dashboard-hero .hero-badge{background:#ffffff18!important;border:1px solid #ffffff2b!important;color:#e3f4ed!important;padding:8px 13px!important;border-radius:99px!important}.aptitude-page .dashboard-hero h2{color:#fffefa!important;font:800 clamp(23px,3vw,31px) Manrope,'Inter',sans-serif!important;letter-spacing:-.7px!important;margin:14px 0 8px!important}.aptitude-page .dashboard-hero p{max-width:650px;color:#d5e6e1!important;font-size:13px!important}.aptitude-page .status-badge{background:#ffffff19!important;border:1px solid #ffffff26!important;color:#f1fbf7!important;border-radius:99px!important;padding:7px 12px!important}.aptitude-page .hero-visual{position:relative;z-index:1}.aptitude-page .hero-visual .ai-orb{width:82px!important;height:82px!important;border-radius:25px!important;background:#ffffff18!important;border:1px solid #ffffff35!important;box-shadow:0 12px 30px #0e34372e!important;font-size:36px!important}.aptitude-page .module-header{padding:20px 22px!important;border:1px solid #d1e5dc!important;border-radius:18px!important;background:linear-gradient(120deg,#e4f1ed,#fffefa 82%)!important;box-shadow:0 12px 28px #233b380b!important;margin-bottom:19px!important}.aptitude-page .large-module-icon{width:58px!important;height:58px!important;border-radius:18px!important;background:#d8eee7!important;box-shadow:inset 0 0 0 1px #c8e4db!important}.aptitude-page .module-header h2{font:800 22px Manrope,'Inter',sans-serif!important;letter-spacing:-.5px!important}.aptitude-page .module-header p{color:#607379!important;line-height:1.6!important}.aptitude-page .module-page{max-width:920px!important;margin:auto!important}.aptitude-page .module-form,.aptitude-page .module-card,.aptitude-page .answer-card{background:#fffefa!important;border:1px solid #e0e8e2!important;border-radius:18px!important;box-shadow:0 14px 36px #293c3a10,0 2px 5px #293c3a07!important}.aptitude-page .module-form{padding:26px!important}.aptitude-page .module-card{padding:22px!important}.aptitude-page .section-heading h2{font:800 18px Manrope,'Inter',sans-serif!important;letter-spacing:-.3px!important}.aptitude-page .section-heading p{color:#75838a!important}.aptitude-page .option-grid{gap:11px!important}.aptitude-page .option-card{position:relative;background:linear-gradient(145deg,#fffefa,#f7faf6)!important;border:1px solid #e1e8e3!important;border-radius:14px!important;color:#24333b!important;transition:transform .18s,border-color .18s,box-shadow .18s!important}.aptitude-page .option-card:hover{transform:translateY(-2px);border-color:#7cb9ad!important;box-shadow:0 8px 18px #237f7815!important}.aptitude-page .option-card:has(input:checked){border-color:#237f78!important;background:linear-gradient(135deg,#e9f5f1,#fffefa)!important;box-shadow:0 0 0 3px #237f7814!important}.aptitude-page .option-icon{width:40px!important;height:40px!important;border-radius:13px!important;background:#e2f1ec!important}.aptitude-page .option-card strong{color:#24333b!important}.aptitude-page .option-card small{color:#75838a!important}.aptitude-page select{width:100%;height:46px;padding:0 13px;border:1px solid #dce2de;border-radius:10px;background:white;color:#24333b;font:14px 'DM Sans',sans-serif}.aptitude-page input[type=radio]{accent-color:#237f78}.aptitude-page .primary-btn{background:#237f78!important;color:white!important;border-radius:11px!important;box-shadow:0 7px 15px #237f7822!important}.aptitude-page .primary-btn:hover{background:#176760!important;transform:translateY(-1px)}.aptitude-page .secondary-btn{background:#fffefa!important;border:1px solid #dfe7e1!important;color:#176760!important;border-radius:11px!important}.aptitude-page .aptitude-test-section{max-width:1120px;margin:0 auto!important}.aptitude-page .aptitude-test-section>.section-heading{margin:0 0 13px!important}.aptitude-page .aptitude-question{display:flex;align-items:center;gap:22px;min-height:210px;padding:27px!important;margin:0 0 14px!important;border:1px solid #dfe8e2!important;border-radius:19px!important;background:#fffefa!important;box-shadow:0 16px 40px #233b3812!important}.aptitude-page .question-content{flex:1;min-width:0}.aptitude-page .question-header{margin-bottom:12px}.aptitude-page .question-badge{background:#dff1eb!important;color:#176760!important;padding:8px 13px!important;border-radius:99px;font-size:11px!important;letter-spacing:.35px;text-transform:uppercase}.aptitude-page .question-text{font:700 clamp(19px,2.2vw,25px)/1.48 Manrope,'Inter',sans-serif!important;letter-spacing:-.35px!important;color:#24333b!important}.aptitude-page .aptitude-options{width:45%!important;min-width:260px!important;display:grid;grid-template-columns:1fr 1fr;gap:10px!important}.aptitude-page .aptitude-option{min-height:62px;display:flex;align-items:center!important;gap:9px;padding:12px!important;border:1px solid #e1e8e3!important;border-radius:12px!important;background:linear-gradient(145deg,#fffefa,#f7faf6)!important;color:#24333b!important;box-shadow:0 3px 9px #243c3808;transition:transform .18s,border-color .18s,box-shadow .18s!important}.aptitude-page .aptitude-option:hover{transform:translateY(-2px);border-color:#7cb9ad!important;box-shadow:0 8px 18px #237f7815}.aptitude-page .aptitude-option.selected{border:1.5px solid #237f78!important;background:linear-gradient(135deg,#e9f5f1,#fffefa)!important;box-shadow:0 0 0 3px #237f7814!important}.aptitude-page .aptitude-option input{width:16px;height:16px;accent-color:#237f78}.aptitude-page .aptitude-option span{font-size:12px!important;line-height:1.45!important;color:#24333b!important}.aptitude-page .aptitude-option strong{color:#176760!important}.aptitude-page .aptitude-navigation{max-width:1120px;margin:17px auto 0!important;padding:13px 15px;background:#fffefa;border:1px solid #e4e8e2;border-radius:15px;box-shadow:0 8px 24px #263b370a}.aptitude-page .question-numbers{gap:7px!important}.aptitude-page .question-number{width:36px!important;height:36px!important;border:1px solid #e0e8e2!important;border-radius:11px!important;background:white!important;color:#52636a!important;font-weight:700!important}.aptitude-page .question-number.active{background:#237f78!important;border-color:#237f78!important;color:white!important;box-shadow:0 5px 12px #237f7830}.aptitude-page .score-circle{width:145px!important;height:145px!important;border-radius:50%!important;background:linear-gradient(145deg,#237f78,#176760)!important;color:white!important;box-shadow:0 14px 32px #237f7835!important}.aptitude-page .score-circle strong{font-size:39px!important}.aptitude-page .answer-card{padding:22px!important;margin-bottom:14px!important}.aptitude-page .answer-header{gap:10px}.aptitude-page .correct-badge,.aptitude-page .wrong-badge{border-radius:99px;padding:7px 11px;font-size:11px;font-weight:700}.aptitude-page .correct-badge{background:#e5f3ed;color:#237f58}.aptitude-page .wrong-badge{background:#faece8;color:#b95343}.aptitude-page .answer-row{margin-top:10px;padding:12px;border:1px solid #e5e8e2;border-radius:10px;background:#f7f8f4}.aptitude-page .explanation{margin-top:12px;padding:14px;border-left:3px solid #237f78;border-radius:10px;background:#e6f3f0}.aptitude-page .stats-grid{gap:12px}.aptitude-page .stat-card{background:#fffefa!important;border:1px solid #e3e8e2!important;border-radius:15px!important;box-shadow:0 9px 24px #293c3a0a!important}.aptitude-page .stat-card h3{color:#24333b!important}@media(max-width:900px){.aptitude-page .aptitude-question{flex-direction:column!important;align-items:stretch!important}.aptitude-page .aptitude-options{width:100%!important;min-width:0!important}}@media(max-width:600px){.aptitude-page .dashboard-hero{padding:20px!important}.aptitude-page .dashboard-hero h2{font-size:23px!important}.aptitude-page .hero-visual .ai-orb{width:62px!important;height:62px!important;border-radius:20px!important;font-size:29px!important}.aptitude-page .module-form{padding:19px!important}.aptitude-page .aptitude-question{padding:18px!important;min-height:0!important}.aptitude-page .aptitude-options{grid-template-columns:1fr}.aptitude-page .aptitude-navigation{justify-content:center;padding:11px!important;gap:9px!important}.aptitude-page .question-numbers{order:3;width:100%}.aptitude-page .answer-header{align-items:flex-start;flex-direction:column}.aptitude-page .stats-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+</style></head>
+
+
+<body class="aptitude-page">
+
+<div class="app-layout">
+
+
+    <!-- =========================
+         SIDEBAR
+    ========================== -->
+
+    <aside class="sidebar">
+
+        <div class="brand">
+
+            <div class="brand-icon">
+                🚀
+            </div>
+
+            <div>
+
+                <h2>CareerPilot</h2>
+
+                <span>
+                    AI Career Platform
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <nav class="sidebar-nav">
+
+            <p class="nav-title">
+                MAIN
+            </p>
+
+            <a href="/dashboard"
+               class="sidebar-link">
+
+                <span>🏠</span>
+                Dashboard
+
+            </a>
+
+
+            <a href="/resume"
+               class="sidebar-link">
+
+                <span>📄</span>
+                Resume Analyzer
+
+            </a>
+
+
+            <a href="/mock-interview"
+               class="sidebar-link">
+
+                <span>🎤</span>
+                Mock Interview
+
+            </a>
+
+
+            <p class="nav-title">
+                PREPARATION
+            </p>
+
+
+            <a href="/roadmap"
+               class="sidebar-link">
+
+                <span>🧭</span>
+                Career Roadmap
+
+            </a>
+
+
+            <a href="/job-matcher"
+               class="sidebar-link">
+
+                <span>💼</span>
+                Job Matcher
+
+            </a>
+
+
+            <a href="/aptitude"
+               class="sidebar-link active">
+
+                <span>🧠</span>
+                Aptitude
+
+            </a>
+
+
+            <a href="/skill-gap"
+               class="sidebar-link">
+
+                <span>🎯</span>
+                Skill Gap
+
+            </a>
+
+
+            <a href="/recruiter"
+               class="sidebar-link">
+
+                <span>🤝</span>
+                Recruiter Simulation
+
+            </a>
+
+
+            <p class="nav-title">
+                ACCOUNT
+            </p>
+
+
+            <a href="/logout"
+               class="sidebar-link">
+
+                <span>↪</span>
+                Logout
+
+            </a>
+
+        </nav>
+
+    </aside>
+
+
+    <!-- =========================
+         MAIN CONTENT
+    ========================== -->
+
+    <main class="main-content">
+
+
+        <!-- TOPBAR -->
+
+        <header class="topbar">
+
+            <div>
+
+                <p class="welcome-small">
+                    Placement Preparation
+                </p>
+
+                <h1>
+                    Aptitude Test Result 🧠
+                </h1>
+
+            </div>
+
+        </header>
+
+
+        <!-- =========================
+             RESULT HERO
+        ========================== -->
+
+        <section class="section">
+
+            <div class="dashboard-hero result-hero">
+
+                <div class="hero-content"
+                     style="width:100%;">
+
+                    {% if final_score >= 80 %}
+
+                        <span class="hero-badge">
+                            🏆 Excellent Performance
+                        </span>
+
+                        <h2>
+                            Great job! You're doing well.
+                        </h2>
+
+                    {% elif final_score >= 50 %}
+
+                        <span class="hero-badge">
+                            👍 Good Attempt
+                        </span>
+
+                        <h2>
+                            Good effort! Keep practicing.
+                        </h2>
+
+                    {% else %}
+
+                        <span class="hero-badge">
+                            📚 Keep Practicing
+                        </span>
+
+                        <h2>
+                            Don't worry. Practice will improve your score.
+                        </h2>
+
+                    {% endif %}
+
+
+                    <div class="score-circle">
+
+                        <strong>
+                            {{ final_score }}%
+                        </strong>
+
+                        <span>
+                            Final Score
+                        </span>
+
+                    </div>
+
+
+                    <p>
+                        Your aptitude assessment has been completed
+                        successfully.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================
+             TEST SUMMARY
+        ========================== -->
+
+        <section class="section">
+
+            <div class="stats-grid">
+
+
+                <div class="stat-card">
+
+                    <p>
+                        Topic
+                    </p>
+
+                    <h3>
+                        {{ topic }}
+                    </h3>
+
+                </div>
+
+
+                <div class="stat-card">
+
+                    <p>
+                        Difficulty
+                    </p>
+
+                    <h3>
+                        {{ difficulty }}
+                    </h3>
+
+                </div>
+
+
+                <div class="stat-card">
+
+                    <p>
+                        Correct Answers
+                    </p>
+
+                    <h3>
+                        {{ score_count }} / {{ total_questions }}
+                    </h3>
+
+                </div>
+
+
+                <div class="stat-card">
+
+                    <p>
+                        Final Score
+                    </p>
+
+                    <h3>
+                        {{ final_score }}%
+                    </h3>
+
+                </div>
+
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================
+             ANSWER REVIEW
+        ========================== -->
+
+        <section class="section">
+
+            <div class="section-heading">
+
+                <div>
+
+                    <h2>
+                        📝 Answer Review
+                    </h2>
+
+                    <p>
+                        Review your answers and learn from the explanations.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            {% for result in results %}
+
+            <div class="answer-card">
+
+
+                <div class="answer-header">
+
+                    <span class="status-badge">
+
+                        Question {{ loop.index }}
+
+                    </span>
+
+
+                    {% if result.selected_answer == result.correct_answer %}
+
+                        <span class="correct-badge">
+                            ✓ Correct
+                        </span>
+
+                    {% else %}
+
+                        <span class="wrong-badge">
+                            ✕ Incorrect
+                        </span>
+
+                    {% endif %}
+
+                </div>
+
+
+                <!-- QUESTION -->
+
+                <h3>
+
+                    {{ result.question }}
+
+                </h3>
+
+
+                <!-- YOUR ANSWER -->
+
+                <div class="answer-row">
+
+                    <strong>
+                        Your Answer
+                    </strong>
+
+                    <span>
+                        {{ result.selected_answer }}
+                    </span>
+
+                </div>
+
+
+                <!-- CORRECT ANSWER -->
+
+                <div class="answer-row">
+
+                    <strong>
+                        Correct Answer
+                    </strong>
+
+                    <span>
+                        {{ result.correct_answer }}
+                    </span>
+
+                </div>
+
+
+                <!-- EXPLANATION -->
+
+                <div class="explanation">
+
+                    <strong>
+                        💡 Explanation
+                    </strong>
+
+                    <p>
+                        {{ result.explanation }}
+                    </p>
+
+                </div>
+
+
+            </div>
+
+            {% endfor %}
+
+        </section>
+
+
+        <!-- =========================
+             ACTION BUTTONS
+        ========================== -->
+
+        <section class="section">
+
+            <div style="
+                display:flex;
+                gap:15px;
+                flex-wrap:wrap;
+            ">
+
+
+                <a href="/aptitude"
+                   class="primary-btn">
+
+                    🔄 Take Another Test
+
+                </a>
+
+
+                <a href="/dashboard"
+                   class="secondary-btn">
+
+                    ← Back to Dashboard
+
+                </a>
+
+
+            </div>
+
+        </section>
+
+
+    </main>
+
+</div>
+
+</body>
+
+</html>

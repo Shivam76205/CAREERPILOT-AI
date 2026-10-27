@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Account | CareerPilot AI</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --auth-ink: #243239;
+            --auth-muted: #718087;
+            --auth-teal: #287c78;
+            --auth-teal-dark: #216764;
+            --auth-pale: #e8f3f0;
+            --auth-cream: #f7f6f0;
+            --auth-line: #e2e6e1;
+            --auth-paper: #fffefa;
+        }
+        * { box-sizing: border-box; }
+        body {
+            min-height: 100vh;
+            margin: 0;
+            padding: 28px;
+            display: grid;
+            place-items: center;
+            color: var(--auth-ink);
+            background:
+                radial-gradient(circle at 12% 16%, rgba(64, 143, 132, .13), transparent 27%),
+                radial-gradient(circle at 92% 86%, rgba(198, 177, 119, .15), transparent 25%),
+                var(--auth-cream);
+            font-family: 'DM Sans', sans-serif;
+        }
+        .register-shell {
+            width: min(100%, 1040px);
+            min-height: 620px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            overflow: hidden;
+            background: var(--auth-paper);
+            border: 1px solid rgba(220, 226, 221, .9);
+            border-radius: 28px;
+            box-shadow: 0 28px 80px rgba(35, 51, 56, .13);
+            animation: arrive .55s ease both;
+        }
+        .welcome-panel {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: clamp(30px, 5vw, 58px);
+            overflow: hidden;
+            color: #f6fbf8;
+            background: linear-gradient(145deg, #20383a 0%, #246c67 100%);
+        }
+        .welcome-panel::before, .welcome-panel::after {
+            content: "";
+            position: absolute;
+            border: 1px solid rgba(255,255,255,.12);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+        .welcome-panel::before { width: 380px; height: 380px; right: -185px; top: -150px; }
+        .welcome-panel::after { width: 260px; height: 260px; right: -125px; top: -90px; }
+        .brand-lockup, .welcome-copy, .welcome-foot { position: relative; z-index: 1; }
+        .brand-lockup { display: flex; align-items: center; gap: 12px; }
+        .brand-mark {
+            width: 46px; height: 46px; display: grid; place-items: center;
+            border: 1px solid rgba(255,255,255,.24); border-radius: 15px;
+            background: rgba(255,255,255,.13); font-size: 22px;
+        }
+        .brand-name { font: 800 18px Manrope, sans-serif; letter-spacing: -.4px; }
+        .brand-caption { display: block; margin-top: 2px; color: #c3d9d4; font-size: 11px; }
+        .welcome-copy { max-width: 390px; margin: 40px 0; }
+        .welcome-tag {
+            display: inline-flex; align-items: center; gap: 8px; padding: 8px 12px;
+            color: #e2f2ec; background: rgba(255,255,255,.10);
+            border: 1px solid rgba(255,255,255,.17); border-radius: 999px;
+            font-size: 11px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase;
+        }
+        .welcome-copy h1 {
+            margin: 23px 0 14px; font: 800 clamp(30px, 4vw, 44px)/1.1 Manrope, sans-serif;
+            letter-spacing: -1.6px;
+        }
+        .welcome-copy p { margin: 0; color: #d2e2de; font-size: 15px; line-height: 1.75; }
+        .benefit-list { display: grid; gap: 13px; margin-top: 30px; }
+        .benefit { display: flex; align-items: center; gap: 11px; color: #eef7f3; font-size: 13px; }
+        .benefit-icon { width: 25px; height: 25px; display: grid; place-items: center; border-radius: 8px; background: rgba(255,255,255,.13); font-size: 12px; }
+        .welcome-foot { color: #bad1cc; font-size: 11px; }
+        .form-panel { display: flex; flex-direction: column; justify-content: center; padding: clamp(30px, 5vw, 62px); }
+        .form-heading { margin-bottom: 28px; }
+        .form-heading .eyebrow { color: var(--auth-teal); font-size: 11px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; }
+        .form-heading h2 { margin: 9px 0 7px; font: 800 29px Manrope, sans-serif; letter-spacing: -.8px; }
+        .form-heading p { margin: 0; color: var(--auth-muted); font-size: 13px; line-height: 1.6; }
+        .register-form { display: grid; gap: 17px; }
+        .field-label { display: block; margin-bottom: 7px; color: #3a484d; font-size: 12px; font-weight: 700; }
+        .input-wrap { position: relative; }
+        .field-icon { position: absolute; top: 50%; left: 14px; transform: translateY(-50%); color: #82918f; font-size: 15px; pointer-events: none; }
+        .register-form input {
+            width: 100%; height: 49px; padding: 0 14px 0 42px;
+            color: var(--auth-ink); background: #fff;
+            border: 1px solid var(--auth-line); border-radius: 11px;
+            outline: none; font: 500 13px 'DM Sans', sans-serif; transition: border-color .18s, box-shadow .18s, background .18s;
+        }
+        .register-form input::placeholder { color: #a1aba9; }
+        .register-form input:focus { background: #fff; border-color: #6ba9a0; box-shadow: 0 0 0 4px rgba(40,124,120,.11); }
+        .password-input { padding-right: 75px !important; }
+        .password-toggle {
+            position: absolute; top: 50%; right: 10px; transform: translateY(-50%);
+            padding: 6px 7px; color: var(--auth-teal); background: transparent; border: 0;
+            font: 700 11px 'DM Sans', sans-serif; cursor: pointer;
+        }
+        .password-toggle:hover { color: var(--auth-teal-dark); }
+        .password-hint { min-height: 17px; margin: 6px 1px 0; color: var(--auth-muted); font-size: 10px; }
+        .submit-btn {
+            width: 100%; min-height: 50px; display: flex; align-items: center; justify-content: center; gap: 9px;
+            margin-top: 5px; color: #fff; background: var(--auth-teal); border: 0; border-radius: 11px;
+            box-shadow: 0 9px 18px rgba(40,124,120,.19); font: 700 14px 'DM Sans', sans-serif; cursor: pointer;
+            transition: transform .18s, background .18s, box-shadow .18s;
+        }
+        .submit-btn:hover { transform: translateY(-2px); background: var(--auth-teal-dark); box-shadow: 0 12px 23px rgba(40,124,120,.25); }
+        .submit-btn:active { transform: translateY(0); }
+        .login-prompt { margin: 21px 0 0; text-align: center; color: var(--auth-muted); font-size: 12px; }
+        .login-prompt a { color: var(--auth-teal); font-weight: 800; text-decoration: none; }
+        .login-prompt a:hover { text-decoration: underline; }
+        .privacy-note { display: flex; align-items: center; justify-content: center; gap: 6px; margin-top: 26px; color: #8b9794; font-size: 10px; }
+        @keyframes arrive { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @media (max-width: 760px) {
+            body { padding: 18px; }
+            .register-shell { max-width: 520px; min-height: auto; grid-template-columns: 1fr; border-radius: 22px; }
+            .welcome-panel { min-height: 255px; padding: 26px 28px; }
+            .welcome-copy { margin: 28px 0 0; }
+            .welcome-copy h1 { margin: 16px 0 9px; font-size: 30px; }
+            .welcome-copy p { max-width: 390px; font-size: 13px; }
+            .benefit-list, .welcome-foot { display: none; }
+            .form-panel { padding: 32px 28px; }
+        }
+        @media (max-width: 420px) {
+            body { padding: 0; background: var(--auth-paper); }
+            .register-shell { min-height: 100vh; border: 0; border-radius: 0; box-shadow: none; }
+            .welcome-panel { min-height: 225px; }
+            .form-panel { justify-content: flex-start; padding: 30px 23px; }
+        }
+        @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; } }
+    </style>
+</head>
+<body>
+    <main class="register-shell">
+        <section class="welcome-panel" aria-label="CareerPilot introduction">
+            <div class="brand-lockup">
+                <div class="brand-mark" aria-hidden="true">🚀</div>
+                <div><span class="brand-name">CareerPilot</span><span class="brand-caption">AI Career Platform</span></div>
+            </div>
+            <div class="welcome-copy">
+                <span class="welcome-tag"><span aria-hidden="true">✦</span> Your next chapter starts here</span>
+                <h1>Build a career you’re proud of.</h1>
+                <p>Create your account to bring your preparation, progress, and career goals together in one place.</p>
+                <div class="benefit-list">
+                    <div class="benefit"><span class="benefit-icon">✓</span> Personalized career preparation</div>
+                    <div class="benefit"><span class="benefit-icon">✓</span> Practical AI-powered tools</div>
+                    <div class="benefit"><span class="benefit-icon">✓</span> Your progress, all in one dashboard</div>
+                </div>
+            </div>
+            <div class="welcome-foot">A clearer path to your next opportunity.</div>
+        </section>
+
+        <section class="form-panel" aria-labelledby="register-title">
+            <header class="form-heading">
+                <span class="eyebrow">Get started</span>
+                <h2 id="register-title">Create your account</h2>
+                <p>It only takes a moment to get your CareerPilot journey started.</p>
+            </header>
+
+            <form method="POST" action="/register" class="register-form">
+                <div>
+                    <label class="field-label" for="register-name">Full name</label>
+                    <div class="input-wrap">
+                        <span class="field-icon" aria-hidden="true">♙</span>
+                        <input id="register-name" type="text" name="name" placeholder="Your full name" autocomplete="name" required>
+                    </div>
+                </div>
+                <div>
+                    <label class="field-label" for="register-email">Email address</label>
+                    <div class="input-wrap">
+                        <span class="field-icon" aria-hidden="true">✉</span>
+                        <input id="register-email" type="email" name="email" placeholder="you@example.com" autocomplete="email" required>
+                    </div>
+                </div>
+                <div>
+                    <label class="field-label" for="register-password">Password</label>
+                    <div class="input-wrap">
+                        <span class="field-icon" aria-hidden="true">▣</span>
+                        <input class="password-input" id="register-password" type="password" name="password" placeholder="Create a password" autocomplete="new-password" required>
+                        <button class="password-toggle" type="button" id="password-toggle" aria-controls="register-password" aria-label="Show password">Show</button>
+                    </div>
+                    <p class="password-hint" id="password-hint" aria-live="polite">Choose a password you’ll remember.</p>
+                </div>
+                <button type="submit" class="submit-btn">Create Account <span aria-hidden="true">→</span></button>
+            </form>
+
+            <p class="login-prompt">Already have an account? <a href="/login">Log in</a></p>
+            <div class="privacy-note"><span aria-hidden="true">🔒</span> Your account details stay private</div>
+        </section>
+    </main>
+    <script>
+        const passwordInput = document.getElementById('register-password');
+        const passwordToggle = document.getElementById('password-toggle');
+        const passwordHint = document.getElementById('password-hint');
+
+        passwordToggle.addEventListener('click', () => {
+            const showing = passwordInput.type === 'password';
+            passwordInput.type = showing ? 'text' : 'password';
+            passwordToggle.textContent = showing ? 'Hide' : 'Show';
+            passwordToggle.setAttribute('aria-label', showing ? 'Hide password' : 'Show password');
+        });
+
+        passwordInput.addEventListener('input', () => {
+            passwordHint.textContent = passwordInput.value
+                ? 'Password entered.'
+                : 'Choose a password you’ll remember.';
+        });
+    </script>
+</body>
+</html>

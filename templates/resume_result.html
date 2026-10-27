@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Resume Analysis | CareerPilot AI</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+          rel="stylesheet">
+</head>
+
+<body>
+
+<div class="app-layout">
+
+    <!-- ========================= -->
+    <!-- SIDEBAR -->
+    <!-- ========================= -->
+
+    <aside class="sidebar">
+
+        <div class="brand">
+
+            <div class="brand-icon">
+                🚀
+            </div>
+
+            <div>
+                <h2>CareerPilot</h2>
+                <span>AI Career Platform</span>
+            </div>
+
+        </div>
+
+
+        <nav class="sidebar-nav">
+
+            <p class="nav-title">MAIN</p>
+
+            <a href="{{ url_for('dashboard') }}"
+               class="sidebar-link">
+
+                <span>🏠</span>
+                Dashboard
+
+            </a>
+
+
+            <a href="{{ url_for('resume') }}"
+               class="sidebar-link active">
+
+                <span>📄</span>
+                Resume Analyzer
+
+            </a>
+
+
+            <a href="{{ url_for('mock_interview') }}"
+               class="sidebar-link">
+
+                <span>🎤</span>
+                Mock Interview
+
+            </a>
+
+
+            <a href="{{ url_for('roadmap') }}"
+               class="sidebar-link">
+
+                <span>🧭</span>
+                Career Roadmap
+
+            </a>
+
+
+            <p class="nav-title">PREPARATION</p>
+
+
+            <a href="{{ url_for('job_matcher') }}"
+               class="sidebar-link">
+
+                <span>💼</span>
+                Job Matcher
+
+            </a>
+
+
+            <a href="{{ url_for('aptitude') }}"
+               class="sidebar-link">
+
+                <span>🧠</span>
+                Aptitude
+
+            </a>
+
+
+            <a href="{{ url_for('skill_gap') }}"
+               class="sidebar-link">
+
+                <span>🎯</span>
+                Skill Gap
+
+            </a>
+
+
+            <a href="{{ url_for('recruiter') }}"
+               class="sidebar-link">
+
+                <span>🤝</span>
+                Recruiter Simulation
+
+            </a>
+
+
+            <p class="nav-title">ACCOUNT</p>
+
+
+            <a href="#" class="sidebar-link">
+
+                <span>👤</span>
+                Profile
+
+            </a>
+
+
+            <a href="#" class="sidebar-link">
+
+                <span>⚙️</span>
+                Settings
+
+            </a>
+
+        </nav>
+
+
+        <div class="sidebar-bottom">
+
+            <a href="{{ url_for('logout') }}"
+               class="logout-link">
+
+                <span>↪</span>
+                Logout
+
+            </a>
+
+        </div>
+
+    </aside>
+
+
+    <!-- ========================= -->
+    <!-- MAIN CONTENT -->
+    <!-- ========================= -->
+
+    <main class="main-content">
+
+
+        <!-- TOP BAR -->
+
+        <header class="topbar">
+
+            <div>
+
+                <p class="welcome-small">
+                    AI Resume Analyzer
+                </p>
+
+                <h1>
+                    Resume Analysis 🤖
+                </h1>
+
+            </div>
+
+
+            <div class="topbar-right">
+
+                <div class="profile-mini">
+
+                    <div class="profile-avatar">
+                        {{ session.get('user_name', 'S')[0] | upper }}
+                    </div>
+
+                    <div>
+
+                        <strong>
+                            {{ session.get('user_name', 'Student') }}
+                        </strong>
+
+                        <small>
+                            Student
+                        </small>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </header>
+
+
+        <!-- ========================= -->
+        <!-- RESULT SECTION -->
+        <!-- ========================= -->
+
+        <section class="section">
+
+            <div class="section-heading">
+
+                <div>
+
+                    <h2>
+                        🤖 AI Resume Analysis
+                    </h2>
+
+                    <p>
+                        Analyzed Resume:
+                        <strong>{{ filename }}</strong>
+                    </p>
+
+                </div>
+
+
+                <a href="{{ url_for('resume') }}"
+                   class="primary-btn">
+
+                    Analyze Another Resume →
+
+                </a>
+
+            </div>
+
+
+            <!-- ========================= -->
+            <!-- ANALYSIS CARD -->
+            <!-- ========================= -->
+
+            <div class="analysis-card">
+
+                <div class="analysis-header">
+
+                    <div class="analysis-icon">
+                        📄
+                    </div>
+
+                    <div>
+
+                        <h3>
+                            AI Evaluation Report
+                        </h3>
+
+                        <p>
+                            Your resume has been analyzed using AI.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <!--
+                    Store Gemini response safely
+                    as JSON inside the page.
+                -->
+
+                <script id="analysis-data"
+                        type="application/json">{{ analysis | tojson }}</script>
+
+
+                <!--
+                    AI analysis will be rendered here.
+                -->
+
+                <div id="analysis-content"
+                     class="analysis-content">
+
+                    <p>
+                        Loading AI analysis...
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ========================= -->
+        <!-- ACTION CARDS -->
+        <!-- ========================= -->
+
+        <section class="section">
+
+            <div class="module-grid">
+
+
+                <!-- ANALYZE AGAIN -->
+
+                <div class="module-card">
+
+                    <div class="module-icon purple">
+                        📄
+                    </div>
+
+                    <div class="module-content">
+
+                        <h3>
+                            Analyze Another Resume
+                        </h3>
+
+                        <p>
+                            Upload another resume and get a fresh
+                            AI-powered evaluation.
+                        </p>
+
+                        <a href="{{ url_for('resume') }}"
+                           class="module-btn">
+
+                            Analyze Resume →
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+
+                <!-- DASHBOARD -->
+
+                <div class="module-card">
+
+                    <div class="module-icon blue">
+                        🏠
+                    </div>
+
+                    <div class="module-content">
+
+                        <h3>
+                            Back to Dashboard
+                        </h3>
+
+                        <p>
+                            Return to your CareerPilot dashboard
+                            and continue your placement preparation.
+                        </p>
+
+                        <a href="{{ url_for('dashboard') }}"
+                           class="module-btn">
+
+                            Go to Dashboard →
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+
+                <!-- MOCK INTERVIEW -->
+
+                <div class="module-card">
+
+                    <div class="module-icon green">
+                        🎤
+                    </div>
+
+                    <div class="module-content">
+
+                        <h3>
+                            Practice Interview
+                        </h3>
+
+                        <p>
+                            Improve your interview performance with
+                            an AI-powered mock interview.
+                        </p>
+
+                        <a href="{{ url_for('mock_interview') }}"
+                           class="module-btn">
+
+                            Start Interview →
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+        </section>
+
+
+    </main>
+
+</div>
+
+
+<!-- ========================= -->
+<!-- MARKED.JS -->
+<!-- ========================= -->
+
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+
+<!-- ========================= -->
+<!-- RENDER AI ANALYSIS -->
+<!-- ========================= -->
+
+<script>
+
+    const analysisElement =
+        document.getElementById("analysis-data");
+
+    const analysis =
+        JSON.parse(analysisElement.textContent);
+
+
+    const analysisContent =
+        document.getElementById("analysis-content");
+
+
+    if (analysis && analysis.trim() !== "") {
+
+        analysisContent.innerHTML =
+            marked.parse(analysis);
+
+    } else {
+
+        analysisContent.innerHTML = `
+            <div class="error-message">
+
+                <h3>
+                    ⚠️ Analysis Unavailable
+                </h3>
+
+                <p>
+                    The AI could not generate an analysis.
+                    Please try uploading the resume again.
+                </p>
+
+            </div>
+        `;
+
+    }
+
+</script>
+
+
+</body>
+</html>

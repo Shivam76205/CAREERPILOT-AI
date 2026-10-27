@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mock Interview | CareerPilot AI</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root{--ink:#24333b;--muted:#75838a;--teal:#237f78;--teal-dark:#176760;--teal-pale:#e6f3f0;--cream:#f7f5ef;--paper:#fffefa;--line:#e6e8e2;--shadow:0 18px 45px #293c3a12}
+    *{box-sizing:border-box}body{margin:0;background:var(--cream);color:var(--ink);font-family:'DM Sans',sans-serif}.app-layout{min-height:100vh;display:flex}.sidebar{width:258px;background:#f0f1eb;border-right:1px solid var(--line);padding:30px 20px;display:flex;flex-direction:column;flex-shrink:0}.brand{display:flex;align-items:center;gap:12px;padding:2px 9px 34px}.brand-icon{width:42px;height:42px;border-radius:14px;background:var(--teal);display:grid;place-items:center;font-size:20px;box-shadow:0 7px 18px #237f7830}.brand h2{font:800 18px Manrope,sans-serif;margin:0;letter-spacing:-.5px}.brand span{font-size:11px;color:var(--muted)}.nav-title{font-size:10px;letter-spacing:1.5px;font-weight:700;color:#99a19e;margin:20px 10px 8px}.sidebar-link{display:flex;align-items:center;gap:12px;padding:11px 12px;border-radius:11px;text-decoration:none;color:#647279;font-size:13px;font-weight:600;margin:3px 0;transition:.2s}.sidebar-link span{width:20px;text-align:center}.sidebar-link:hover,.sidebar-link.active{color:var(--teal-dark);background:#e2efeb}.sidebar-link.active{font-weight:700}.main-content{flex:1;min-width:0;padding:30px clamp(22px,5vw,72px) 60px}.topbar{display:flex;align-items:center;justify-content:space-between;max-width:1050px;margin:0 auto 34px}.welcome-small{font-size:12px;color:var(--teal);font-weight:700;letter-spacing:.4px;margin:0 0 5px}.topbar h1{font:800 28px Manrope,sans-serif;letter-spacing:-.8px;margin:0}.module-page{max-width:850px;margin:auto}.module-header{display:flex;align-items:center;gap:19px;margin:0 0 26px}.large-module-icon{width:65px;height:65px;display:grid;place-items:center;background:var(--teal-pale);border-radius:20px;font-size:28px;flex-shrink:0}.module-header h2{font:800 23px Manrope,sans-serif;letter-spacing:-.6px;margin:0 0 5px}.module-header p{margin:0;color:var(--muted);font-size:14px;line-height:1.6}.module-form{background:var(--paper);border:1px solid var(--line);border-radius:22px;padding:30px;box-shadow:var(--shadow)}.field-label{display:block;font-weight:700;font-size:14px;margin:0 0 15px}.option-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px}.option-card{position:relative;display:flex;flex-direction:column;align-items:flex-start;gap:9px;padding:21px;border:1px solid var(--line);border-radius:16px;cursor:pointer;transition:.2s;background:#fff}.option-card:hover{border-color:#9fc9c2;transform:translateY(-2px)}.option-card:has(input:checked){border-color:var(--teal);background:#f2faf7;box-shadow:0 0 0 3px #237f7815}.option-card input{position:absolute;right:17px;top:18px;accent-color:var(--teal);width:17px;height:17px}.option-icon{width:42px;height:42px;border-radius:13px;background:var(--teal-pale);display:grid;place-items:center;font-size:21px}.option-card strong{font:700 15px Manrope,sans-serif}.option-card small{color:var(--muted);font-size:12px;line-height:1.5}.primary-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:0;border-radius:12px;padding:14px 20px;background:var(--teal);color:white;font:700 14px 'DM Sans',sans-serif;text-decoration:none;cursor:pointer;transition:.2s}.primary-btn:hover{background:var(--teal-dark);transform:translateY(-1px)}.form-submit{margin-top:23px;width:100%}.overlay{position:fixed;inset:0;z-index:10;background:#1e3030a8;display:none;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(5px)}.overlay.show{display:flex}.processing-card{width:min(420px,100%);padding:34px;background:var(--paper);border:1px solid #ffffff80;border-radius:22px;text-align:center;box-shadow:0 24px 70px #15272740}.spinner{width:52px;height:52px;margin:0 auto 20px;border:4px solid #dcece8;border-top-color:var(--teal);border-radius:50%;animation:spin .8s linear infinite}.processing-card h2{font:800 20px Manrope,sans-serif;margin:0 0 8px}.processing-card p{font-size:13px;color:var(--muted);line-height:1.6;margin:0}.processing-dots{display:flex;justify-content:center;gap:6px;margin:19px 0 0}.processing-dots i{width:6px;height:6px;border-radius:50%;background:#77b8ad;animation:pulse 1s infinite}.processing-dots i:nth-child(2){animation-delay:.15s}.processing-dots i:nth-child(3){animation-delay:.3s}@keyframes spin{to{transform:rotate(360deg)}}@keyframes pulse{50%{opacity:.25;transform:translateY(-3px)}}
+    @media(max-width:760px){.sidebar{width:72px;padding:22px 10px}.brand{justify-content:center;padding:0 0 28px}.brand>div:last-child,.nav-title,.sidebar-link{font-size:0}.sidebar-link{justify-content:center;padding:12px 8px}.sidebar-link span{font-size:17px}.topbar h1{font-size:23px}.option-grid{grid-template-columns:1fr}.module-form{padding:22px}.module-header h2{font-size:20px}}
+    @media(max-width:430px){.sidebar{display:none}.main-content{padding:23px 17px 40px}.module-header{align-items:flex-start}.large-module-icon{width:52px;height:52px;border-radius:16px}.topbar{margin-bottom:27px}}
+  </style>
+<style>
+/* CareerPilot unified Slate + Teal + Cream finish */
+body{background:#f7f6f0;color:#24333b}
+.app-layout>.sidebar{background:#243239;color:#f5f6f2;border-right:0;box-shadow:8px 0 28px rgba(25,42,45,.08)}
+.brand h2{color:#fff}.brand span{color:#aebfc0}.nav-title{color:#91aaa9}
+.sidebar-link{color:#c1cecc;border-radius:12px}.sidebar-link:hover,.sidebar-link.active{background:#dcece8;color:#1d6561}
+.main-content{background:#f7f6f0}.module-header{padding:22px 24px;border-radius:20px;background:linear-gradient(125deg,#20383a 0%,#286f6a 100%);box-shadow:0 18px 38px rgba(28,64,62,.15)}
+.module-header h2{color:#fff}.module-header p{color:#d9e8e4}.large-module-icon{background:rgba(255,255,255,.13);border:1px solid rgba(255,255,255,.16)}
+.module-form{background:#fffefa;border-color:#e1e4de;box-shadow:0 15px 38px rgba(35,50,55,.07)}
+.option-card{box-shadow:0 5px 14px rgba(35,50,55,.025)}.option-card:has(input:checked){background:#f2faf7}
+.primary-btn{background:#287c78}.primary-btn:hover{background:#216764}
+@media(max-width:760px){.module-header{padding:19px}}
+</style>
+</head>
+<body>
+<div class="app-layout">
+  <aside class="sidebar">
+    <div class="brand"><div class="brand-icon">🚀</div><div><h2>CareerPilot</h2><span>AI Career Platform</span></div></div>
+    <nav class="sidebar-nav">
+      <p class="nav-title">MAIN</p>
+      <a href="/dashboard" class="sidebar-link"><span>🏠</span>Dashboard</a>
+      <a href="/resume" class="sidebar-link"><span>📄</span>Resume Analyzer</a>
+      <a href="/mock-interview" class="sidebar-link active"><span>🎤</span>Mock Interview</a>
+      <p class="nav-title">PREPARATION</p>
+      <a href="/roadmap" class="sidebar-link"><span>🧭</span>Career Roadmap</a>
+      <a href="/job-matcher" class="sidebar-link"><span>💼</span>Job Matcher</a>
+      <a href="/aptitude" class="sidebar-link"><span>🧠</span>Aptitude</a>
+      <a href="/skill-gap" class="sidebar-link"><span>🎯</span>Skill Gap</a>
+      <a href="/recruiter" class="sidebar-link"><span>🤝</span>Recruiter Simulation</a>
+      <p class="nav-title">ACCOUNT</p>
+      <a href="/logout" class="sidebar-link"><span>↪</span>Logout</a>
+    </nav>
+  </aside>
+  <main class="main-content">
+    <header class="topbar"><div><p class="welcome-small">AI Interview Practice</p><h1>Mock Interview</h1></div></header>
+    <section class="module-page">
+      <div class="module-header"><div class="large-module-icon">🎤</div><div><h2>AI Mock Interview</h2><p>Practice realistic placement interview questions and receive thoughtful AI-powered feedback.</p></div></div>
+      <form method="POST" action="/mock-interview" class="module-form" id="interviewForm">
+        <label class="field-label">Choose your interview format</label>
+        <div class="option-grid">
+          <label class="option-card"><input type="radio" name="interview_type" value="HR" required><span class="option-icon">👔</span><strong>HR Interview</strong><small>Communication, teamwork, and personality questions</small></label>
+          <label class="option-card"><input type="radio" name="interview_type" value="Technical"><span class="option-icon">💻</span><strong>Technical Interview</strong><small>Role-related concepts, problem solving, and programming</small></label>
+        </div>
+        <button type="submit" class="primary-btn form-submit" id="startButton">Start AI Interview <span aria-hidden="true">→</span></button>
+      </form>
+    </section>
+  </main>
+</div>
+<div class="overlay" id="processingOverlay" role="dialog" aria-modal="true" aria-labelledby="processingTitle" aria-live="polite">
+  <div class="processing-card"><div class="spinner" aria-hidden="true"></div><h2 id="processingTitle">Preparing your interview</h2><p>We’re creating a question for your selected interview type. This may take a few moments.</p><div class="processing-dots" aria-hidden="true"><i></i><i></i><i></i></div></div>
+</div>
+<script>
+  document.getElementById('interviewForm').addEventListener('submit', function () {
+    document.getElementById('startButton').disabled = true;
+    document.getElementById('processingOverlay').classList.add('show');
+  });
+</script>
+</body>
+</html>

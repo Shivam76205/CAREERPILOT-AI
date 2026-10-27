@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Interview Question | CareerPilot AI</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root{--ink:#24333b;--muted:#75838a;--teal:#237f78;--teal-dark:#176760;--teal-pale:#e6f3f0;--cream:#f7f5ef;--paper:#fffefa;--line:#e6e8e2;--shadow:0 18px 45px #293c3a12}*{box-sizing:border-box}body{margin:0;background:var(--cream);color:var(--ink);font-family:'DM Sans',sans-serif}.app-layout{min-height:100vh;display:flex}.sidebar{width:258px;background:#f0f1eb;border-right:1px solid var(--line);padding:30px 20px;flex-shrink:0}.brand{display:flex;align-items:center;gap:12px;padding:2px 9px 34px}.brand-icon{width:42px;height:42px;border-radius:14px;background:var(--teal);display:grid;place-items:center;font-size:20px;box-shadow:0 7px 18px #237f7830}.brand h2{font:800 18px Manrope,sans-serif;margin:0;letter-spacing:-.5px}.brand span{font-size:11px;color:var(--muted)}.nav-title{font-size:10px;letter-spacing:1.5px;font-weight:700;color:#99a19e;margin:20px 10px 8px}.sidebar-link{display:flex;align-items:center;gap:12px;padding:11px 12px;border-radius:11px;text-decoration:none;color:#647279;font-size:13px;font-weight:600;margin:3px 0}.sidebar-link span{width:20px;text-align:center}.sidebar-link:hover,.sidebar-link.active{color:var(--teal-dark);background:#e2efeb}.sidebar-link.active{font-weight:700}.main-content{flex:1;min-width:0;padding:30px clamp(20px,5vw,72px) 60px}.topbar{max-width:920px;margin:0 auto 32px;display:flex;justify-content:space-between;align-items:center}.welcome-small{font-size:12px;color:var(--teal);font-weight:700;letter-spacing:.4px;margin:0 0 5px}.topbar h1{font:800 27px Manrope,sans-serif;letter-spacing:-.8px;margin:0}.nav-link{color:var(--teal-dark);background:var(--teal-pale);text-decoration:none;font-size:13px;font-weight:700;padding:10px 15px;border-radius:10px}.dashboard{max-width:920px;margin:0 auto}.dashboard-header{margin-bottom:22px}.eyebrow{color:var(--teal);font-size:12px;text-transform:uppercase;letter-spacing:1.3px;font-weight:700;margin:0 0 7px}.dashboard-header h2{font:800 23px Manrope,sans-serif;margin:0 0 5px}.dashboard-header p{color:var(--muted);margin:0;font-size:14px}.question-card{background:var(--paper);border:1px solid var(--line);border-radius:22px;padding:30px;box-shadow:var(--shadow)}.card-label{display:flex;align-items:center;gap:10px;color:var(--teal-dark);font:700 14px Manrope,sans-serif}.card-label span{width:34px;height:34px;border-radius:11px;background:var(--teal-pale);display:grid;place-items:center;font-size:17px}.question-text{font:700 clamp(19px,2.6vw,25px) Manrope,sans-serif;line-height:1.5;letter-spacing:-.45px;margin:20px 0 28px;white-space:pre-wrap}.answer-label{display:flex;justify-content:space-between;align-items:center;font-weight:700;font-size:13px;margin-bottom:10px}.answer-label small{font-weight:500;color:var(--muted)}textarea{display:block;width:100%;min-height:190px;padding:16px;border-radius:13px;border:1px solid #d9e0dc;background:#fff;color:var(--ink);font:14px/1.65 'DM Sans',sans-serif;resize:vertical;outline:none;transition:.2s}textarea:focus{border-color:var(--teal);box-shadow:0 0 0 3px #237f7818}textarea::placeholder{color:#a0aaa9}.form-footer{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-top:18px}.helper{font-size:12px;color:var(--muted);line-height:1.5}.primary-btn{border:0;border-radius:12px;padding:13px 20px;background:var(--teal);color:white;font:700 14px 'DM Sans',sans-serif;cursor:pointer;transition:.2s;white-space:nowrap}.primary-btn:hover{background:var(--teal-dark);transform:translateY(-1px)}.overlay{position:fixed;inset:0;z-index:10;background:#1e3030a8;display:none;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(5px)}.overlay.show{display:flex}.processing-card{width:min(420px,100%);padding:34px;background:var(--paper);border:1px solid #ffffff80;border-radius:22px;text-align:center;box-shadow:0 24px 70px #15272740}.spinner{width:52px;height:52px;margin:0 auto 20px;border:4px solid #dcece8;border-top-color:var(--teal);border-radius:50%;animation:spin .8s linear infinite}.processing-card h2{font:800 20px Manrope,sans-serif;margin:0 0 8px}.processing-card p{font-size:13px;color:var(--muted);line-height:1.6;margin:0}.processing-dots{display:flex;justify-content:center;gap:6px;margin:19px 0 0}.processing-dots i{width:6px;height:6px;border-radius:50%;background:#77b8ad;animation:pulse 1s infinite}.processing-dots i:nth-child(2){animation-delay:.15s}.processing-dots i:nth-child(3){animation-delay:.3s}@keyframes spin{to{transform:rotate(360deg)}}@keyframes pulse{50%{opacity:.25;transform:translateY(-3px)}}
+    @media(max-width:760px){.sidebar{width:72px;padding:22px 10px}.brand{justify-content:center;padding:0 0 28px}.brand>div:last-child,.nav-title{display:none}.sidebar-link{font-size:0;justify-content:center;padding:12px 8px}.sidebar-link span{font-size:17px}.question-card{padding:23px}.topbar h1{font-size:22px}}@media(max-width:430px){.sidebar{display:none}.main-content{padding:22px 16px 40px}.form-footer{align-items:stretch;flex-direction:column}.primary-btn{width:100%}.topbar{margin-bottom:25px}}
+  </style>
+</head>
+<body>
+<div class="app-layout">
+  <aside class="sidebar">
+    <div class="brand"><div class="brand-icon">🚀</div><div><h2>CareerPilot</h2><span>AI Career Platform</span></div></div>
+    <nav class="sidebar-nav">
+      <p class="nav-title">MAIN</p><a href="/dashboard" class="sidebar-link"><span>🏠</span>Dashboard</a><a href="/resume" class="sidebar-link"><span>📄</span>Resume Analyzer</a><a href="/mock-interview" class="sidebar-link active"><span>🎤</span>Mock Interview</a>
+      <p class="nav-title">PREPARATION</p><a href="/roadmap" class="sidebar-link"><span>🧭</span>Career Roadmap</a><a href="/job-matcher" class="sidebar-link"><span>💼</span>Job Matcher</a><a href="/aptitude" class="sidebar-link"><span>🧠</span>Aptitude</a><a href="/skill-gap" class="sidebar-link"><span>🎯</span>Skill Gap</a><a href="/recruiter" class="sidebar-link"><span>🤝</span>Recruiter Simulation</a>
+      <p class="nav-title">ACCOUNT</p><a href="/logout" class="sidebar-link"><span>↪</span>Logout</a>
+    </nav>
+  </aside>
+  <main class="main-content">
+    <header class="topbar"><div><p class="welcome-small">AI Interview Practice</p><h1>Mock Interview</h1></div><a href="/dashboard" class="nav-link">← Dashboard</a></header>
+    <div class="dashboard">
+      <header class="dashboard-header"><p class="eyebrow">Your practice session</p><h2>{{ interview_type }} Interview</h2><p>Take a moment to think through your response, then share it below.</p></header>
+      <section class="question-card">
+        <div class="card-label"><span>🤖</span>Interview question</div>
+        <p class="question-text">{{ question }}</p>
+        <form method="POST" action="/submit-answer" id="answerForm">
+          <input type="hidden" name="interview_id" value="{{ interview_id }}">
+          <label class="answer-label" for="answer">Your answer <small>Be clear and specific</small></label>
+          <textarea id="answer" name="answer" placeholder="Type your answer here..." required></textarea>
+          <div class="form-footer"><span class="helper">Use examples from your experience where you can.</span><button type="submit" class="primary-btn" id="submitButton">Submit answer&nbsp; →</button></div>
+        </form>
+      </section>
+    </div>
+  </main>
+</div>
+<div class="overlay" id="processingOverlay" role="dialog" aria-modal="true" aria-labelledby="processingTitle" aria-live="polite">
+  <div class="processing-card"><div class="spinner" aria-hidden="true"></div><h2 id="processingTitle">Evaluating your answer</h2><p>We’re reviewing your response and preparing useful feedback. This may take a few moments.</p><div class="processing-dots" aria-hidden="true"><i></i><i></i><i></i></div></div>
+</div>
+<script>
+  document.getElementById('answerForm').addEventListener('submit', function () {
+    document.getElementById('submitButton').disabled = true;
+    document.getElementById('processingOverlay').classList.add('show');
+  });
+</script>
+</body>
+</html>

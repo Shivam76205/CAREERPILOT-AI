@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Resume Analyzer | CareerPilot AI</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+          rel="stylesheet">
+
+</head>
+
+
+<body>
+
+<div class="app-layout">
+
+
+    <!-- ================= SIDEBAR ================= -->
+
+    <aside class="sidebar">
+
+
+        <!-- BRAND -->
+
+        <div class="brand">
+
+            <div class="brand-icon">
+                🚀
+            </div>
+
+            <div>
+
+                <h2>
+                    CareerPilot
+                </h2>
+
+                <span>
+                    AI Career Platform
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <!-- NAVIGATION -->
+
+        <nav class="sidebar-nav">
+
+
+            <p class="nav-title">
+                MAIN
+            </p>
+
+
+            <a href="/dashboard"
+               class="sidebar-link">
+
+                <span>🏠</span>
+
+                Dashboard
+
+            </a>
+
+
+            <a href="/resume"
+               class="sidebar-link active">
+
+                <span>📄</span>
+
+                Resume Analyzer
+
+            </a>
+
+
+            <a href="/mock-interview"
+               class="sidebar-link">
+
+                <span>🎤</span>
+
+                Mock Interview
+
+            </a>
+
+
+            <p class="nav-title">
+                PREPARATION
+            </p>
+
+
+            <a href="/roadmap"
+               class="sidebar-link">
+
+                <span>🧭</span>
+
+                Career Roadmap
+
+            </a>
+
+
+            <a href="/job-matcher"
+               class="sidebar-link">
+
+                <span>💼</span>
+
+                Job Matcher
+
+            </a>
+
+
+            <a href="/aptitude"
+               class="sidebar-link">
+
+                <span>🧠</span>
+
+                Aptitude
+
+            </a>
+
+
+            <a href="/skill-gap"
+               class="sidebar-link">
+
+                <span>🎯</span>
+
+                Skill Gap
+
+            </a>
+
+
+            <a href="/recruiter"
+               class="sidebar-link">
+
+                <span>🤝</span>
+
+                Recruiter Simulation
+
+            </a>
+
+
+            <p class="nav-title">
+                ACCOUNT
+            </p>
+
+
+            <a href="/logout"
+               class="sidebar-link">
+
+                <span>↪</span>
+
+                Logout
+
+            </a>
+
+
+        </nav>
+
+    </aside>
+
+
+
+    <!-- ================= MAIN CONTENT ================= -->
+
+    <main class="main-content">
+
+
+        <!-- ================= TOP BAR ================= -->
+
+        <header class="topbar">
+
+
+            <div>
+
+                <p class="welcome-small">
+                    Placement Preparation
+                </p>
+
+
+                <h1>
+                    Resume Analyzer
+                </h1>
+
+            </div>
+
+
+            <!-- PROFILE -->
+
+            <div class="topbar-right">
+
+
+                <div class="profile-mini">
+
+
+                    <div class="profile-avatar">
+
+                        {{ session.get("user_name", "S")[0]|upper }}
+
+                    </div>
+
+
+                    <div>
+
+                        <strong>
+
+                            {{ session.get("user_name", "Student") }}
+
+                        </strong>
+
+
+                        <small>
+                            Student
+                        </small>
+
+                    </div>
+
+
+                </div>
+
+
+            </div>
+
+
+        </header>
+
+
+
+        <!-- ================= HERO ================= -->
+
+        <section class="dashboard-hero">
+
+
+            <div class="hero-content">
+
+
+                <span class="hero-badge">
+
+                    🤖 AI Resume Analysis
+
+                </span>
+
+
+                <h2>
+
+                    Improve your resume with AI-powered insights.
+
+                </h2>
+
+
+                <p>
+
+                    Upload your resume and CareerPilot AI will analyze
+                    its quality, ATS compatibility, technical skills,
+                    projects, formatting and placement readiness.
+
+                </p>
+
+
+            </div>
+
+
+            <div class="hero-visual">
+
+
+                <div class="ai-orb">
+
+                    📄
+
+                </div>
+
+
+                <div class="orb-glow"></div>
+
+
+            </div>
+
+
+        </section>
+
+
+
+        <!-- ================= RESUME UPLOAD ================= -->
+
+        <section class="section">
+
+
+            <div class="section-heading">
+
+
+                <div>
+
+
+                    <h2>
+                        Upload Your Resume
+                    </h2>
+
+
+                    <p>
+
+                        Upload your resume in PDF format for AI analysis.
+
+                    </p>
+
+
+                </div>
+
+
+            </div>
+
+
+
+            <div class="module-card">
+
+
+                <div class="module-content">
+
+
+                    <!-- FORM -->
+
+                    <form method="POST"
+                          action="/resume"
+                          enctype="multipart/form-data">
+
+
+                        <!-- FILE INPUT -->
+
+                        <div class="form-group">
+
+
+                            <label for="resume">
+
+                                Resume PDF
+
+                            </label>
+
+
+                            <input
+                                type="file"
+                                id="resume"
+                                name="resume"
+                                accept=".pdf,application/pdf"
+                                required
+                            >
+
+
+                            <small>
+
+                                Upload a PDF resume only.
+
+                            </small>
+
+
+                        </div>
+
+
+
+                        <!-- SUBMIT -->
+
+                        <button
+                            type="submit"
+                            class="primary-btn form-submit">
+
+                            🤖 Analyze My Resume →
+
+                        </button>
+
+
+                    </form>
+
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- ================= FEATURES ================= -->
+
+        <section class="section">
+
+
+            <div class="section-heading">
+
+
+                <div>
+
+
+                    <h2>
+                        What CareerPilot AI Checks
+                    </h2>
+
+
+                    <p>
+
+                        Your resume is analyzed across important
+                        placement-readiness factors.
+
+                    </p>
+
+
+                </div>
+
+
+            </div>
+
+
+
+            <div class="stats-grid">
+
+
+                <!-- SCORE -->
+
+                <div class="stat-card">
+
+
+                    <div class="stat-top">
+
+
+                        <div class="stat-icon resume-icon">
+
+                            📊
+
+                        </div>
+
+
+                    </div>
+
+
+                    <p>
+                        Resume Score
+                    </p>
+
+
+                    <h3>
+                        0–100
+                    </h3>
+
+
+                </div>
+
+
+
+                <!-- ATS -->
+
+                <div class="stat-card">
+
+
+                    <div class="stat-top">
+
+
+                        <div class="stat-icon interview-icon">
+
+                            🤖
+
+                        </div>
+
+
+                    </div>
+
+
+                    <p>
+                        ATS Compatibility
+                    </p>
+
+
+                    <h3>
+                        Checked
+                    </h3>
+
+
+                </div>
+
+
+
+                <!-- SKILLS -->
+
+                <div class="stat-card">
+
+
+                    <div class="stat-top">
+
+
+                        <div class="stat-icon aptitude-icon">
+
+                            💻
+
+                        </div>
+
+
+                    </div>
+
+
+                    <p>
+                        Technical Skills
+                    </p>
+
+
+                    <h3>
+                        Analyzed
+                    </h3>
+
+
+                </div>
+
+
+
+                <!-- IMPROVEMENTS -->
+
+                <div class="stat-card">
+
+
+                    <div class="stat-top">
+
+
+                        <div class="stat-icon skill-icon">
+
+                            💡
+
+                        </div>
+
+
+                    </div>
+
+
+                    <p>
+                        Improvements
+                    </p>
+
+
+                    <h3>
+                        Suggested
+                    </h3>
+
+
+                </div>
+
+
+            </div>
+
+
+        </section>
+
+
+
+        <!-- ================= ANALYSIS FEATURES ================= -->
+
+        <section class="section">
+
+
+            <div class="section-heading">
+
+
+                <div>
+
+
+                    <h2>
+                        AI Analysis Includes
+                    </h2>
+
+
+                    <p>
+
+                        CareerPilot AI provides detailed feedback
+                        based on your uploaded resume.
+
+                    </p>
+
+
+                </div>
+
+
+            </div>
+
+
+
+            <div class="feature-grid">
+
+
+                <div class="feature-item">
+
+                    <span>🎯</span>
+
+                    Resume Score
+
+                </div>
+
+
+                <div class="feature-item">
+
+                    <span>📋</span>
+
+                    ATS Compatibility
+
+                </div>
+
+
+                <div class="feature-item">
+
+                    <span>💪</span>
+
+                    Resume Strengths
+
+                </div>
+
+
+                <div class="feature-item">
+
+                    <span>⚠️</span>
+
+                    Resume Weaknesses
+
+                </div>
+
+
+                <div class="feature-item">
+
+                    <span>💻</span>
+
+                    Missing Skills
+
+                </div>
+
+
+                <div class="feature-item">
+
+                    <span>📚</span>
+
+                    Skills To Learn
+
+                </div>
+
+
+                <div class="feature-item">
+
+                    <span>✨</span>
+
+                    Improvement Suggestions
+
+                </div>
+
+
+                <div class="feature-item">
+
+                    <span>🚀</span>
+
+                    Placement Readiness
+
+                </div>
+
+
+            </div>
+
+
+        </section>
+
+
+    </main>
+
+</div>
+
+
+</body>
+
+</html>

@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Login | CareerPilot AI</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+
+</head>
+
+
+<body class="auth-page">
+
+
+    <div class="auth-wrapper">
+
+
+        <!-- BRAND -->
+
+        <div class="auth-brand">
+
+            <div class="brand-icon">
+                🚀
+            </div>
+
+            <h1>
+                CareerPilot <span>AI</span>
+            </h1>
+
+            <p>
+                Your AI-powered placement companion
+            </p>
+
+        </div>
+
+
+        <!-- LOGIN CARD -->
+
+        <div class="auth-card">
+
+            <h2>
+                Welcome Back 👋
+            </h2>
+
+            <p class="auth-subtitle">
+                Login to continue your placement journey
+            </p>
+
+
+            <!-- LOGIN FORM -->
+
+            <form method="POST"
+                  action="/login">
+
+
+                <!-- EMAIL -->
+
+                <div class="input-group">
+
+                    <label>
+                        Email Address
+                    </label>
+
+                    <input
+                        type="email"
+                        name="email"
+                        placeholder="Enter your email"
+                        required>
+
+                </div>
+
+
+                <!-- PASSWORD -->
+
+                <div class="input-group">
+
+                    <label>
+                        Password
+                    </label>
+
+                    <input
+                        type="password"
+                        name="password"
+                        placeholder="Enter your password"
+                        required>
+
+                </div>
+
+
+                <!-- OPTIONS -->
+
+                <div class="auth-options">
+
+                    <label class="remember">
+
+                        <input
+                            type="checkbox"
+                            name="remember">
+
+                        Remember me
+
+                    </label>
+
+
+                    <a href="#"
+                       class="forgot-link">
+
+                        Forgot Password?
+
+                    </a>
+
+                </div>
+
+
+                <!-- LOGIN BUTTON -->
+
+                <button
+                    type="submit"
+                    class="auth-btn">
+
+                    Login to CareerPilot AI →
+
+                </button>
+
+
+            </form>
+
+
+            <!-- DIVIDER -->
+
+            <div class="divider">
+
+                <span>
+                    OR
+                </span>
+
+            </div>
+
+
+            <!-- REGISTER -->
+
+            <p class="register-text">
+
+                Don't have an account?
+
+                <a href="/register">
+                    Create Account
+                </a>
+
+            </p>
+
+
+        </div>
+
+
+        <!-- FOOTER -->
+
+        <p class="auth-footer">
+
+            © 2026 CareerPilot AI
+            •
+            AI-Powered Career Development
+
+        </p>
+
+
+    </div>
+
+
+</body>
+
+</html>

@@ -1,0 +1,1002 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resume Analyzer | CareerPilot AI</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        /* =========================================================
+           RESUME ANALYZER — PAGE-SPECIFIC UI
+           Logic/routes are unchanged.
+           ========================================================= */
+
+        .resume-page {
+            --rp-slate: #263238;
+            --rp-dark: #1F292D;
+            --rp-teal: #287C78;
+            --rp-dark-teal: #216764;
+            --rp-soft: #EEF7F5;
+            --rp-light: #D9ECE9;
+            --rp-cream: #F7F6F0;
+            --rp-line: #DCE2E1;
+            --rp-text: #20292D;
+            --rp-muted: #68757A;
+        }
+
+        .resume-page .topbar {
+            margin-bottom: 26px;
+        }
+
+        .resume-page .resume-intro {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) 300px;
+            gap: 24px;
+            padding: 34px;
+            background: linear-gradient(135deg, #ffffff 0%, var(--rp-soft) 100%);
+            border: 1px solid var(--rp-line);
+            border-radius: 22px;
+            box-shadow: 0 14px 35px rgba(38, 50, 56, .07);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .resume-page .resume-intro::after {
+            content: "";
+            position: absolute;
+            width: 230px;
+            height: 230px;
+            border: 1px solid rgba(40, 124, 120, .10);
+            border-radius: 50%;
+            right: -90px;
+            top: -100px;
+        }
+
+        .resume-page .intro-copy {
+            position: relative;
+            z-index: 1;
+        }
+
+        .resume-page .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            background: var(--rp-soft);
+            border: 1px solid var(--rp-light);
+            color: var(--rp-dark-teal);
+            border-radius: 999px;
+            font-size: 12px;
+            font-weight: 800;
+            letter-spacing: .04em;
+            text-transform: uppercase;
+        }
+
+        .resume-page .intro-copy h2 {
+            max-width: 720px;
+            margin: 18px 0 12px;
+            color: var(--rp-text);
+            font-size: clamp(28px, 3vw, 42px);
+            line-height: 1.12;
+            letter-spacing: -.035em;
+        }
+
+        .resume-page .intro-copy p {
+            max-width: 720px;
+            margin: 0;
+            color: var(--rp-muted);
+            font-size: 15px;
+            line-height: 1.75;
+        }
+
+        .resume-page .intro-points {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 22px;
+        }
+
+        .resume-page .intro-point {
+            padding: 8px 11px;
+            background: #fff;
+            border: 1px solid var(--rp-line);
+            border-radius: 10px;
+            color: var(--rp-text);
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .resume-page .resume-visual {
+            min-height: 210px;
+            display: grid;
+            place-items: center;
+            position: relative;
+        }
+
+        .resume-page .document-art {
+            width: 132px;
+            height: 166px;
+            background: #fff;
+            border: 1px solid var(--rp-line);
+            border-radius: 13px;
+            box-shadow: 0 18px 35px rgba(38, 50, 56, .13);
+            position: relative;
+            padding: 25px 20px;
+            transform: rotate(2deg);
+        }
+
+        .resume-page .document-art::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            right: 0;
+            border-style: solid;
+            border-width: 0 30px 30px 0;
+            border-color: transparent var(--rp-light) transparent transparent;
+        }
+
+        .resume-page .document-art span {
+            display: block;
+            height: 7px;
+            margin-bottom: 12px;
+            background: var(--rp-light);
+            border-radius: 20px;
+        }
+
+        .resume-page .document-art span:nth-child(1) { width: 58%; background: var(--rp-teal); }
+        .resume-page .document-art span:nth-child(2) { width: 92%; }
+        .resume-page .document-art span:nth-child(3) { width: 78%; }
+        .resume-page .document-art span:nth-child(4) { width: 90%; }
+        .resume-page .document-art span:nth-child(5) { width: 64%; }
+
+        .resume-page .scan-ring {
+            position: absolute;
+            width: 195px;
+            height: 195px;
+            border: 1px solid rgba(40,124,120,.18);
+            border-radius: 50%;
+        }
+
+        .resume-page .scan-ring::before {
+            content: "";
+            position: absolute;
+            inset: 16px;
+            border: 1px dashed rgba(40,124,120,.22);
+            border-radius: 50%;
+        }
+
+        .resume-page .workspace {
+            margin-top: 26px;
+            display: grid;
+            grid-template-columns: minmax(0, 1.45fr) minmax(280px, .75fr);
+            gap: 24px;
+            align-items: stretch;
+        }
+
+        .resume-page .upload-card,
+        .resume-page .side-card,
+        .resume-page .checks-card {
+            background: #fff;
+            border: 1px solid var(--rp-line);
+            border-radius: 20px;
+            box-shadow: 0 10px 28px rgba(38, 50, 56, .055);
+        }
+
+        .resume-page .upload-card {
+            padding: 28px;
+        }
+
+        .resume-page .card-heading {
+            margin-bottom: 20px;
+        }
+
+        .resume-page .card-heading h2,
+        .resume-page .side-card h3,
+        .resume-page .checks-title h2 {
+            margin: 0;
+            color: var(--rp-text);
+        }
+
+        .resume-page .card-heading h2 {
+            font-size: 21px;
+        }
+
+        .resume-page .card-heading p,
+        .resume-page .side-card p,
+        .resume-page .checks-title p {
+            margin: 7px 0 0;
+            color: var(--rp-muted);
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        .resume-page .dropzone {
+            min-height: 255px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+            border: 1.5px dashed #AFCAC6;
+            border-radius: 17px;
+            background: #FAFCFB;
+            cursor: pointer;
+            transition: .2s ease;
+        }
+
+        .resume-page .dropzone:hover,
+        .resume-page .dropzone.dragover {
+            border-color: var(--rp-teal);
+            background: var(--rp-soft);
+            transform: translateY(-1px);
+        }
+
+        .resume-page .drop-content {
+            text-align: center;
+            max-width: 430px;
+        }
+
+        .resume-page .upload-icon {
+            width: 58px;
+            height: 58px;
+            margin: 0 auto 14px;
+            display: grid;
+            place-items: center;
+            border-radius: 15px;
+            background: var(--rp-soft);
+            color: var(--rp-dark-teal);
+            font-size: 25px;
+            border: 1px solid var(--rp-light);
+        }
+
+        .resume-page .drop-content h3 {
+            margin: 0;
+            color: var(--rp-text);
+            font-size: 17px;
+        }
+
+        .resume-page .drop-content p {
+            margin: 8px 0 14px;
+            color: var(--rp-muted);
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        .resume-page .browse-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px 17px;
+            border-radius: 9px;
+            background: var(--rp-slate);
+            color: #fff;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: .2s ease;
+        }
+
+        .resume-page .browse-btn:hover {
+            background: var(--rp-dark);
+            transform: translateY(-1px);
+        }
+
+        .resume-page .file-name {
+            min-height: 20px;
+            margin-top: 12px;
+            color: var(--rp-dark-teal);
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .resume-page .file-input {
+            display: none;
+        }
+
+        .resume-page .upload-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            margin-top: 20px;
+            padding-top: 18px;
+            border-top: 1px solid var(--rp-line);
+        }
+
+        .resume-page .format-note {
+            color: var(--rp-muted);
+            font-size: 12px;
+            line-height: 1.5;
+        }
+
+        .resume-page .format-note strong {
+            color: var(--rp-text);
+        }
+
+        .resume-page .analyze-btn {
+            border: 0;
+            border-radius: 10px;
+            padding: 12px 19px;
+            background: var(--rp-teal);
+            color: #fff;
+            font: inherit;
+            font-size: 13px;
+            font-weight: 800;
+            cursor: pointer;
+            box-shadow: 0 8px 18px rgba(40,124,120,.20);
+            transition: .2s ease;
+            white-space: nowrap;
+        }
+
+        .resume-page .analyze-btn:hover {
+            background: var(--rp-dark-teal);
+            transform: translateY(-1px);
+        }
+
+        .resume-page .analyze-btn:disabled {
+            opacity: .65;
+            cursor: wait;
+            transform: none;
+        }
+
+        .resume-page .side-card {
+            padding: 25px;
+        }
+
+        .resume-page .side-card h3 {
+            font-size: 18px;
+        }
+
+        .resume-page .check-list {
+            display: grid;
+            gap: 14px;
+            margin-top: 22px;
+        }
+
+        .resume-page .check-row {
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+        }
+
+        .resume-page .check-mark {
+            flex: 0 0 28px;
+            width: 28px;
+            height: 28px;
+            display: grid;
+            place-items: center;
+            border-radius: 8px;
+            background: var(--rp-soft);
+            color: var(--rp-dark-teal);
+            font-size: 13px;
+            font-weight: 900;
+        }
+
+        .resume-page .check-row strong {
+            display: block;
+            color: var(--rp-text);
+            font-size: 13px;
+            margin-bottom: 3px;
+        }
+
+        .resume-page .check-row span {
+            color: var(--rp-muted);
+            font-size: 11px;
+            line-height: 1.5;
+        }
+
+        .resume-page .checks-section {
+            margin-top: 26px;
+        }
+
+        .resume-page .checks-title {
+            margin-bottom: 16px;
+        }
+
+        .resume-page .checks-title h2 {
+            font-size: 22px;
+        }
+
+        .resume-page .checks-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 14px;
+        }
+
+        .resume-page .check-card {
+            min-height: 126px;
+            padding: 18px;
+            background: #fff;
+            border: 1px solid var(--rp-line);
+            border-radius: 15px;
+            transition: .2s ease;
+        }
+
+        .resume-page .check-card:hover {
+            border-color: #B8D4D0;
+            transform: translateY(-2px);
+            box-shadow: 0 9px 20px rgba(38,50,56,.06);
+        }
+
+        .resume-page .check-card-icon {
+            width: 34px;
+            height: 34px;
+            display: grid;
+            place-items: center;
+            margin-bottom: 14px;
+            border-radius: 9px;
+            background: var(--rp-soft);
+            color: var(--rp-dark-teal);
+            font-size: 15px;
+        }
+
+        .resume-page .check-card strong {
+            display: block;
+            color: var(--rp-text);
+            font-size: 13px;
+        }
+
+        .resume-page .check-card span {
+            display: block;
+            margin-top: 5px;
+            color: var(--rp-muted);
+            font-size: 11px;
+            line-height: 1.45;
+        }
+
+        /* Real-request loading state: stays visible while the form submits. */
+        .resume-page .ai-processing {
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            display: none;
+            place-items: center;
+            background: rgba(31,41,45,.72);
+            backdrop-filter: blur(4px);
+        }
+
+        .resume-page .ai-processing.active {
+            display: grid;
+        }
+
+        .resume-page .processing-box {
+            width: min(430px, calc(100% - 32px));
+            padding: 30px;
+            text-align: center;
+            background: #fff;
+            border-radius: 20px;
+            box-shadow: 0 25px 70px rgba(0,0,0,.22);
+        }
+
+        .resume-page .processing-orb {
+            width: 64px;
+            height: 64px;
+            margin: 0 auto 18px;
+            display: grid;
+            place-items: center;
+            border-radius: 50%;
+            background: var(--rp-soft);
+            border: 1px solid var(--rp-light);
+            color: var(--rp-dark-teal);
+            font-size: 26px;
+            animation: resumePulse 1.4s ease-in-out infinite;
+        }
+
+        .resume-page .processing-box h3 {
+            margin: 0;
+            color: var(--rp-text);
+            font-size: 19px;
+        }
+
+        .resume-page .processing-box p {
+            margin: 7px 0 0;
+            color: var(--rp-muted);
+            font-size: 13px;
+        }
+
+        .resume-page .processing-line {
+            width: 100%;
+            height: 4px;
+            margin-top: 20px;
+            overflow: hidden;
+            border-radius: 10px;
+            background: var(--rp-light);
+        }
+
+        .resume-page .processing-line::after {
+            content: "";
+            display: block;
+            width: 38%;
+            height: 100%;
+            border-radius: inherit;
+            background: var(--rp-teal);
+            animation: resumeScan 1.1s ease-in-out infinite;
+        }
+
+        @keyframes resumePulse {
+            0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(40,124,120,.15); }
+            50% { transform: scale(1.06); box-shadow: 0 0 0 12px rgba(40,124,120,0); }
+        }
+
+        @keyframes resumeScan {
+            0% { transform: translateX(-120%); }
+            100% { transform: translateX(300%); }
+        }
+
+        @media (max-width: 1050px) {
+            .resume-page .resume-intro {
+                grid-template-columns: 1fr;
+            }
+
+            .resume-page .resume-visual {
+                display: none;
+            }
+
+            .resume-page .workspace {
+                grid-template-columns: 1fr;
+            }
+
+            .resume-page .checks-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 650px) {
+            .resume-page .resume-intro,
+            .resume-page .upload-card,
+            .resume-page .side-card {
+                padding: 20px;
+            }
+
+            .resume-page .intro-copy h2 {
+                font-size: 28px;
+            }
+
+            .resume-page .dropzone {
+                min-height: 220px;
+            }
+
+            .resume-page .upload-footer {
+                align-items: stretch;
+                flex-direction: column;
+            }
+
+            .resume-page .analyze-btn {
+                width: 100%;
+            }
+
+            .resume-page .checks-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .resume-page .processing-orb,
+            .resume-page .processing-line::after {
+                animation: none;
+            }
+
+            .resume-page .dropzone,
+            .resume-page .check-card,
+            .resume-page .browse-btn,
+            .resume-page .analyze-btn {
+                transition: none;
+            }
+        }
+    </style>
+<style>
+/* CareerPilot unified Slate + Teal + Cream finish */
+.resume-page .sidebar{background:#243239;color:#f5f6f2;border-right:0;box-shadow:8px 0 28px rgba(25,42,45,.08)}
+.resume-page .brand h2{color:#fff}.resume-page .brand span{color:#aebfc0}
+.resume-page .nav-title{color:#91aaa9}.resume-page .sidebar-link{color:#c1cecc;border-radius:12px}
+.resume-page .sidebar-link:hover,.resume-page .sidebar-link.active{background:#dcece8;color:#1d6561}
+.resume-page .main-content{background:#f7f6f0}.resume-page .topbar{max-width:1180px}
+.resume-page .resume-intro{background:linear-gradient(125deg,#20383a 0%,#286f6a 100%);border:0;box-shadow:0 20px 42px rgba(28,64,62,.17)}
+.resume-page .resume-intro::after{border-color:rgba(255,255,255,.12)}
+.resume-page .intro-copy h2{color:#fff}.resume-page .intro-copy p{color:#d9e8e4}
+.resume-page .eyebrow{background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.22);color:#e6f4ef}
+.resume-page .intro-point{background:rgba(255,255,255,.10);border-color:rgba(255,255,255,.19);color:#f1f7f4}
+.resume-page .workspace{max-width:1180px;margin-left:auto;margin-right:auto}
+.resume-page .checks-section{max-width:1180px;margin-left:auto;margin-right:auto}
+.resume-page .upload-card,.resume-page .side-card,.resume-page .check-card{box-shadow:0 12px 30px rgba(35,50,55,.055)}
+.resume-page .analyze-btn{background:#287c78}.resume-page .analyze-btn:hover{background:#216764}
+@media(max-width:650px){.resume-page .resume-intro{padding:24px}}
+</style>
+</head>
+
+<body>
+
+<div class="app-layout resume-page">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+
+        <div class="brand">
+            <div class="brand-icon">🚀</div>
+            <div>
+                <h2>CareerPilot</h2>
+                <span>AI Career Platform</span>
+            </div>
+        </div>
+
+        <nav class="sidebar-nav">
+
+            <p class="nav-title">MAIN</p>
+
+            <a href="{{ url_for('dashboard') }}" class="sidebar-link">
+                <span>🏠</span> Dashboard
+            </a>
+
+            <a href="{{ url_for('resume') }}" class="sidebar-link active">
+                <span>📄</span> Resume Analyzer
+            </a>
+
+            <a href="{{ url_for('mock_interview') }}" class="sidebar-link">
+                <span>🎤</span> Mock Interview
+            </a>
+
+            <p class="nav-title">PREPARATION</p>
+
+            <a href="{{ url_for('roadmap') }}" class="sidebar-link">
+                <span>🧭</span> Career Roadmap
+            </a>
+
+            <a href="{{ url_for('job_matcher') }}" class="sidebar-link">
+                <span>💼</span> Job Matcher
+            </a>
+
+            <a href="{{ url_for('aptitude') }}" class="sidebar-link">
+                <span>🧠</span> Aptitude
+            </a>
+
+            <a href="{{ url_for('skill_gap') }}" class="sidebar-link">
+                <span>🎯</span> Skill Gap
+            </a>
+
+            <a href="{{ url_for('recruiter') }}" class="sidebar-link">
+                <span>🤝</span> Recruiter Simulation
+            </a>
+
+            <p class="nav-title">ACCOUNT</p>
+
+            <a href="{{ url_for('logout') }}" class="sidebar-link">
+                <span>↪</span> Logout
+            </a>
+
+        </nav>
+    </aside>
+
+
+    <!-- MAIN -->
+    <main class="main-content">
+
+        <header class="topbar">
+            <div>
+                <p class="welcome-small">Placement Preparation</p>
+                <h1>Resume Analyzer</h1>
+            </div>
+
+            <div class="topbar-right">
+                <div class="profile-mini">
+                    <div class="profile-avatar">
+                        {{ session.get("user_name", "S")[0]|upper }}
+                    </div>
+                    <div>
+                        <strong>{{ session.get("user_name", "Student") }}</strong>
+                        <small>Student</small>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+
+        <!-- INTRO -->
+        <section class="resume-intro">
+
+            <div class="intro-copy">
+
+                <span class="eyebrow">🤖 AI Resume Analysis</span>
+
+                <h2>Turn your resume into a stronger placement profile.</h2>
+
+                <p>
+                    Upload your PDF resume and CareerPilot AI will review
+                    its quality, ATS compatibility, technical skills,
+                    projects, structure and placement readiness.
+                </p>
+
+                <div class="intro-points">
+                    <span class="intro-point">✓ ATS Review</span>
+                    <span class="intro-point">✓ Skill Analysis</span>
+                    <span class="intro-point">✓ Improvement Tips</span>
+                    <span class="intro-point">✓ Placement Readiness</span>
+                </div>
+
+            </div>
+
+            <div class="resume-visual" aria-hidden="true">
+                <div class="scan-ring"></div>
+                <div class="document-art">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+
+        </section>
+
+
+        <!-- UPLOAD WORKSPACE -->
+        <section class="workspace">
+
+            <div class="upload-card">
+
+                <div class="card-heading">
+                    <h2>Upload your resume</h2>
+                    <p>Use your latest resume in PDF format for the most relevant analysis.</p>
+                </div>
+
+                <form id="resume-form"
+                      method="POST"
+                      action="{{ url_for('resume') }}"
+                      enctype="multipart/form-data">
+
+                    <label for="resume" class="dropzone" id="dropzone">
+
+                        <div class="drop-content">
+
+                            <div class="upload-icon">📄</div>
+
+                            <h3>Drop your resume here</h3>
+
+                            <p>
+                                Drag and drop your PDF here, or choose a file
+                                from your computer.
+                            </p>
+
+                            <span class="browse-btn">Choose PDF Resume</span>
+
+                            <div class="file-name" id="file-name">
+                                No file selected
+                            </div>
+
+                        </div>
+
+                    </label>
+
+                    <input class="file-input"
+                           type="file"
+                           id="resume"
+                           name="resume"
+                           accept=".pdf,application/pdf"
+                           required>
+
+                    <div class="upload-footer">
+
+                        <div class="format-note">
+                            <strong>Supported:</strong> PDF only ·
+                            Your resume will be analyzed by CareerPilot AI.
+                        </div>
+
+                        <button type="submit"
+                                class="analyze-btn"
+                                id="analyze-btn">
+                            🤖 Analyze My Resume →
+                        </button>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+
+            <!-- WHAT AI CHECKS -->
+            <aside class="side-card">
+
+                <h3>What the AI checks</h3>
+
+                <p>
+                    CareerPilot focuses on the areas that matter during
+                    placement preparation.
+                </p>
+
+                <div class="check-list">
+
+                    <div class="check-row">
+                        <div class="check-mark">01</div>
+                        <div>
+                            <strong>Resume Quality</strong>
+                            <span>Structure, clarity and overall presentation.</span>
+                        </div>
+                    </div>
+
+                    <div class="check-row">
+                        <div class="check-mark">02</div>
+                        <div>
+                            <strong>ATS Compatibility</strong>
+                            <span>Keywords, formatting and recruiter readability.</span>
+                        </div>
+                    </div>
+
+                    <div class="check-row">
+                        <div class="check-mark">03</div>
+                        <div>
+                            <strong>Technical Skills</strong>
+                            <span>Skills, projects and areas that can be improved.</span>
+                        </div>
+                    </div>
+
+                    <div class="check-row">
+                        <div class="check-mark">04</div>
+                        <div>
+                            <strong>Placement Readiness</strong>
+                            <span>Actionable suggestions to strengthen your profile.</span>
+                        </div>
+                    </div>
+
+                </div>
+
+            </aside>
+
+        </section>
+
+
+        <!-- ANALYSIS AREAS -->
+        <section class="checks-section">
+
+            <div class="checks-title">
+                <h2>What you receive after analysis</h2>
+                <p>
+                    Your AI report is organized around practical improvements
+                    instead of a simple generic score.
+                </p>
+            </div>
+
+            <div class="checks-grid">
+
+                <div class="check-card">
+                    <div class="check-card-icon">🎯</div>
+                    <strong>Resume Score</strong>
+                    <span>Overall resume quality and placement readiness.</span>
+                </div>
+
+                <div class="check-card">
+                    <div class="check-card-icon">📋</div>
+                    <strong>ATS Compatibility</strong>
+                    <span>Potential ATS issues and keyword improvements.</span>
+                </div>
+
+                <div class="check-card">
+                    <div class="check-card-icon">💪</div>
+                    <strong>Strengths</strong>
+                    <span>What is already working well in your resume.</span>
+                </div>
+
+                <div class="check-card">
+                    <div class="check-card-icon">⚠️</div>
+                    <strong>Weaknesses</strong>
+                    <span>Areas that may reduce your resume's impact.</span>
+                </div>
+
+                <div class="check-card">
+                    <div class="check-card-icon">💻</div>
+                    <strong>Missing Skills</strong>
+                    <span>Skills that could improve your target profile.</span>
+                </div>
+
+                <div class="check-card">
+                    <div class="check-card-icon">📚</div>
+                    <strong>Skills to Learn</strong>
+                    <span>Useful areas to focus on for future preparation.</span>
+                </div>
+
+                <div class="check-card">
+                    <div class="check-card-icon">✨</div>
+                    <strong>Improvement Suggestions</strong>
+                    <span>Clear actions you can take after the analysis.</span>
+                </div>
+
+                <div class="check-card">
+                    <div class="check-card-icon">🚀</div>
+                    <strong>Placement Readiness</strong>
+                    <span>A practical view of how prepared your profile is.</span>
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- REAL REQUEST PROCESSING OVERLAY -->
+    <div class="ai-processing" id="ai-processing">
+
+        <div class="processing-box">
+
+            <div class="processing-orb">📄</div>
+
+            <h3>Analyzing your resume...</h3>
+
+            <p>
+                CareerPilot AI is scanning your resume and preparing
+                personalized placement insights.
+            </p>
+
+            <div class="processing-line"></div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+    const resumeForm = document.getElementById("resume-form");
+    const resumeInput = document.getElementById("resume");
+    const dropzone = document.getElementById("dropzone");
+    const fileName = document.getElementById("file-name");
+    const analyzeButton = document.getElementById("analyze-btn");
+    const processingOverlay = document.getElementById("ai-processing");
+
+    function updateFileName() {
+        const file = resumeInput.files && resumeInput.files[0];
+
+        if (!file) {
+            fileName.textContent = "No file selected";
+            return;
+        }
+
+        fileName.textContent = "Selected: " + file.name;
+    }
+
+    resumeInput.addEventListener("change", updateFileName);
+
+    ["dragenter", "dragover"].forEach(eventName => {
+        dropzone.addEventListener(eventName, event => {
+            event.preventDefault();
+            dropzone.classList.add("dragover");
+        });
+    });
+
+    ["dragleave", "drop"].forEach(eventName => {
+        dropzone.addEventListener(eventName, event => {
+            event.preventDefault();
+            dropzone.classList.remove("dragover");
+        });
+    });
+
+    dropzone.addEventListener("drop", event => {
+        const files = event.dataTransfer.files;
+
+        if (files.length && files[0].type === "application/pdf") {
+            resumeInput.files = files;
+            updateFileName();
+        } else if (files.length) {
+            fileName.textContent = "Please choose a PDF file.";
+        }
+    });
+
+    resumeForm.addEventListener("submit", event => {
+        if (!resumeInput.files.length) {
+            event.preventDefault();
+            fileName.textContent = "Please select a PDF resume first.";
+            return;
+        }
+
+        analyzeButton.disabled = true;
+        analyzeButton.textContent = "Analyzing...";
+        processingOverlay.classList.add("active");
+    });
+</script>
+
+</body>
+</html>
